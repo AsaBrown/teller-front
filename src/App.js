@@ -19,9 +19,9 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import Home from "./pages/Home"
-import Bank from './pages/Bank';
-import Login from './pages/Login'
+import Home from "./components/pages/Home"
+import Bank from './components/pages/Bank';
+import Login from './components/pages/Login'
 
 function App() {
   const navigate = useNavigate();
