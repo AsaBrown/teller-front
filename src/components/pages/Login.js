@@ -1,48 +1,41 @@
 // src/components/Login.js
 import React, { useState } from 'react';
 import '../../styles/login.css';
-import { Email } from '@mui/icons-material';
+import FormInput from '../FormInput';
+import useForm from '../../hooks/useForm';
+import useAuth from '../../hooks/useAuth';
+
 
 const Login = () => {
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
+    const { registerUser, loginUser, error } = useAuth();
 
-    const doSiteLogin = (e) => {
+    const { values, handleChange} = useForm({
+        initialValues: {
+            email: '',
+            password: ''
+        }
+      });
+
+    const doSiteLogin = async (e) => {
         e.preventDefault();
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/auth/authenticate`, {
-            method: 'POST',
-            mode: 'cors',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: document.getElementById('loginEmail').value,
-                password: document.getElementById('loginPassword').value
-            })
-        }).then(response => response.text()).then(body => {
-            console.log(body);
-            // window.location.replace(body);
-            // store jwt token in cookies
-        });
+        await registerUser(values);
     }
 
     return (
 
         
         <form id='login' onSubmit={doSiteLogin}>
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="Email"
-            />
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Password"
-            />
+            <FormInput type={"text"} 
+                    placeholder={"Email"}
+                    name={"email"}
+                    value={values.email}
+                    handleChange={handleChange} />
+            <FormInput type={"text"} 
+                    placeholder={"Password"}
+                    name={"password"}
+                    value={values.password}
+                    handleChange={handleChange} />
             <button type="submit">Login</button>
         </form>
     );

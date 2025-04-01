@@ -1,12 +1,13 @@
 // src/components/Login.js
 import React, { useState } from 'react';
 import '../../styles/login.css';
-import { Email } from '@mui/icons-material';
-import { useForm } from '../../hooks/useForm'
+import useForm from '../../hooks/useForm';
+import useAuth from '../../hooks/useAuth';
+import FormInput from '../FormInput';
 
 const Register = () => {
 
-    const { registerUser, error } = useAuth();
+    const { registerUser, loginUser, error } = useAuth();
 
     const { values, handleChange} = useForm({
         initialValues: {
@@ -18,14 +19,12 @@ const Register = () => {
         }
       });
 
-    const doSiteLogin = async (e) => {
+    const doSiteRegister = async (e) => {
         e.preventDefault();
         await registerUser(values);
     }
 
     return (
-
-        
         <form id='login' onSubmit={doSiteLogin}>
             <FormInput type={"text"} 
                     placeholder={"First Name"}
