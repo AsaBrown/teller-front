@@ -4,54 +4,42 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - master
+
 env:
   REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+  AZURE_RESOURCE_NAME: "tellerapp"
+  DOCKER_IMAGE_NAME: "teller-img"
 
 jobs:
-  build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+  build_and_deploy:
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
+    name: Build and Deploy with Docker
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-          lfs: false
+      - uses: actions/checkout@v4
       
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Test Azure Login
+        run: |
+          echo "${{ secrets.AZURE_CREDENTIALS }}" > creds.json
+          az login --service-principal \
+            -u $(jq -r .clientId creds.json) \
+            -p $(jq -r .clientSecret creds.json) \
+            --tenant $(jq -r .tenantId creds.json)
+          az account show
+
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-          node-version: '23'
-          
-      - name: Install dependencies
-        run: npm install
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-      - name: Build React app
-        run: CI=false npm run build
+      - name: Build Docker image
+        run: |
+          docker build -t $DOCKER_IMAGE_NAME .
       
       - name: Deploy to Azure Static Web Apps
-        id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AGREEABLE_MOSS_0A5BFEA1E }}
           repo_token: ${{ secrets.GH_TOKEN }}
-          action: "upload"
-          app_location: "/"
-          api_location: ""
-          output_location: "build"
-
-  close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close Pull Request Job
-    steps:
-      - name: Close Pull Request
-        id: closepullrequest
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AGREEABLE_MOSS_0A5BFEA1E }}
-          action: "close"
+          app_location: "build"
+          output_location: ""
+          skip_app_build: true
