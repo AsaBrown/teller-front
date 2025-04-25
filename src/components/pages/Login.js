@@ -19,12 +19,10 @@ const Login = () => {
 
     const doSiteLogin = async (e) => {
         e.preventDefault();
-        await registerUser(values);
+        await loginUser(values);
     }
 
     return (
-
-        
         <form id='login' onSubmit={doSiteLogin}>
             <FormInput type={"text"} 
                     placeholder={"Email"}

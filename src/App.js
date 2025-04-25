@@ -22,6 +22,8 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import Home from "./components/pages/Home"
 import Bank from './components/pages/Bank';
 import Login from './components/pages/Login'
+import { UserContext } from './hooks/UserContext';
+import useFindUser from './hooks/useFindUser';
 
 function App() {
   const navigate = useNavigate();
@@ -34,31 +36,33 @@ function App() {
   menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
   };
 
+  const {user, setUser, isLoading} = useFindUser();
+
   return (
     <div className="App" style={({ height: "100vh" }, { display: "flex" })}>
-
-      <Sidebar collapsed={menuCollapse} style={{ height: "100vh" }}>
-        <Menu>
-          <MenuItem
-              icon={<MenuOutlinedIcon />}
-              onClick={() => {
-                menuIconClick();
-              }}
-              style={{ textAlign: "center" }}
-          >
-            Menu
-          </MenuItem>
-          <MenuItem onClick={() => navigate("/home")}>
-            Home
-          </MenuItem>
-          <MenuItem onClick={() => navigate("/login")}>
-            Login
-          </MenuItem>
-          <MenuItem onClick={() => navigate("/bank")}>
-            Bank
-          </MenuItem>
-        </Menu>
-      </Sidebar>
+      <UserContext.Provider value={{ user, setUser, isLoading }}>
+        <Sidebar collapsed={menuCollapse} style={{ height: "100vh" }}>
+          <Menu>
+            <MenuItem
+                icon={<MenuOutlinedIcon />}
+                onClick={() => {
+                  menuIconClick();
+                }}
+                style={{ textAlign: "center" }}
+            >
+              Menu
+            </MenuItem>
+            <MenuItem onClick={() => navigate("/home")}>
+              Home
+            </MenuItem>
+            <MenuItem onClick={() => navigate("/login")}>
+              Login
+            </MenuItem>
+            <MenuItem onClick={() => navigate("/bank")}>
+              Bank
+            </MenuItem>
+          </Menu>
+        </Sidebar>
 
         <Routes>
           <Route
@@ -75,7 +79,7 @@ function App() {
           element={<Login/>}
           />
         </Routes>
-
+      </UserContext.Provider>
     </div>
   );
 }
