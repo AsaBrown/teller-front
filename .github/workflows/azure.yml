@@ -23,9 +23,9 @@ jobs:
           lfs: false
       
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '23' # Use the version your app needs
+          node-version: '23'
           
       - name: Install dependencies
         run: npm install
@@ -42,7 +42,7 @@ jobs:
           action: "upload"
           app_location: "/"
           api_location: ""
-          output_location: "build" # This should match your React build output folder
+          output_location: "build"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
