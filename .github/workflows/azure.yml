@@ -25,6 +25,9 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t $DOCKER_IMAGE_NAME .
+          docker create --name temp $DOCKER_IMAGE_NAME
+          docker cp temp:/output ./build  # Copies from /output to local ./build
+          docker rm temp
       
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
