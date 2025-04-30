@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master, test
+      - master
+      - test
 
 env:
   REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
