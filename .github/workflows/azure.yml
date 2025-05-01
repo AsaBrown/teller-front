@@ -8,7 +8,6 @@ on:
       - test
 
 env:
-  REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
   AZURE_RESOURCE_NAME: "tellerapp"
   DOCKER_IMAGE_NAME: "teller-img"
 
