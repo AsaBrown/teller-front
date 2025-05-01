@@ -28,7 +28,9 @@ jobs:
       
       - name: Build Docker image
         run: |
-          docker build -t $DOCKER_IMAGE_NAME .
+          docker build \
+          --build-arg REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }} \
+          -t $DOCKER_IMAGE_NAME .
           docker create --name temp $DOCKER_IMAGE_NAME
           docker cp temp:/output ./build  # Copies from /output to local ./build
           docker rm temp
