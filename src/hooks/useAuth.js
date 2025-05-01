@@ -46,7 +46,7 @@ export default function useAuth() {
 
     const loginUser = async (data) => {
         const { email, password } = data;
-        console.log(`FETCHING: ${process.env.REACT_APP_BACKEND_URL}`);
+        console.log("FETCHING: " + process.env.REACT_APP_BACKEND_URL);
         fetch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/auth/authenticate`, {
             method: 'POST',
             mode: 'cors',
