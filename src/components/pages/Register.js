@@ -15,7 +15,6 @@ const Register = () => {
             lastName: '',
             email: '',
             password: '',
-            username: ''
         }
       });
 
@@ -45,11 +44,6 @@ const Register = () => {
                     placeholder={"Password"}
                     name={"password"}
                     value={values.password}
-                    handleChange={handleChange} />
-            <FormInput type={"text"} 
-                    placeholder={"Username"}
-                    name={"username"}
-                    value={values.username}
                     handleChange={handleChange} />
             <button type="submit">Login</button>
         </form>

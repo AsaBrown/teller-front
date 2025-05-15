@@ -23,7 +23,7 @@ export default function useAuth() {
     }
 
     const registerUser = async (data) => {
-        const { firstName, lastName, email, password, username } = data;
+        const { firstName, lastName, email, password } = data;
         fetch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/auth/register`, {
             method: 'POST',
             mode: 'cors',
@@ -34,9 +34,8 @@ export default function useAuth() {
             body: JSON.stringify({
                 firstName : firstName,
                 lastName : lastName,
-                email: email,
-                password: password,
-                username: username
+                username: email,
+                password: password
             })
         }).then(response => response.text()).then(body => {
             console.log(body);
@@ -54,14 +53,12 @@ export default function useAuth() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: email,
+                username: email,
                 password: password
             })
         }).then(response => response.text()).then(body => {
             setUserContext();
             console.log("LOGIN" + body);
-            // window.location.replace(body);
-            // store jwt token in cookies
         });
     }
 
